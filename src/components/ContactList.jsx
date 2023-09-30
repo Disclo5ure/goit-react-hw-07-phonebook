@@ -1,30 +1,28 @@
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Contact } from './Contact';
-import { getContacts, getFilter } from 'redux/selectors';
-import { nanoid } from 'nanoid';
-
-const getVisibleContacts = (contacts, filter) => {
-  return contacts.filter(contact =>
-    contact.name.toLowerCase().includes(filter.toLowerCase())
-  );
-};
+import { selectVisibleContacts } from 'redux/selectors';
+import { useEffect } from 'react';
+import { fetchContacts } from 'redux/operations';
 
 export const ContactList = () => {
-  const contacts = useSelector(getContacts);
-  const filter = useSelector(getFilter);
-  const visibleContacts =
-    contacts.length !== 0 ? getVisibleContacts(contacts, filter) : null;
+  const dispatch = useDispatch();
+  const contacts = useSelector(selectVisibleContacts);
+
+  useEffect(() => {
+    dispatch(fetchContacts());
+  }, [dispatch]);
 
   return (
     <>
       <h2>Contacts</h2>
       <ul>
-        {visibleContacts
-          ? visibleContacts.map(contact => (
+        {contacts
+          ? contacts.map(contact => (
               <Contact
-                key={nanoid()}
+                key={contact.id}
                 name={contact.name}
                 number={contact.number}
+                id={contact.id}
               />
             ))
           : null}

@@ -1,17 +1,19 @@
 import { useDispatch } from 'react-redux';
-import { deleteContact } from 'redux/contactsSlice';
+import { deleteContact } from 'redux/operations';
 
 export const Contact = props => {
   const dispatch = useDispatch();
 
-  const handleDeleteContact = name => dispatch(deleteContact(name));
+  const handleDeleteContact = id => {
+    dispatch(deleteContact(id));
+  };
 
   return (
     <li>
       {props.name}: {props.number}
       <button
         className="delete-button"
-        onClick={() => handleDeleteContact(props.name)}
+        onClick={() => handleDeleteContact(props.id)}
       >
         Delete
       </button>
